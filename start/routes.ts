@@ -24,6 +24,8 @@ Route.group(() => {
   Route.get('/user', 'GetsController.getUser')
   Route.patch('/user', 'PatchesController.updateUser')
   Route.get('/logout', 'GetsController.logout')
+  Route.post('/user/profile', 'PostsController.createProfile')
+  Route.get('/user/profile', 'GetsController.getUserProfile')
 })
 .middleware('auth')
 

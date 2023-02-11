@@ -3,6 +3,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Hash from '@ioc:Adonis/Core/Hash'
 
 import User from 'App/Models/User'
+import Profile from 'App/Models/Profile'
 
 export default class PostsController {
   public async createUser({ request, response }: HttpContextContract) {
@@ -43,6 +44,36 @@ export default class PostsController {
       response.status(403)
       return {
         error: "Please Enter valid data"
+      }
+    }
+  }
+
+  public async createProfile({ request, auth, response }: HttpContextContract) {
+    try {
+      const userId = auth.use('api').user!.id
+      const newProfileSchema = schema.create({
+        first_name: schema.string({}, [rules.minLength(3), rules.maxLength(30)]),
+        last_name: schema.string({}, [rules.minLength(3), rules.maxLength(30)]),
+        mobile_number: schema.string({}, [rules.mobile(), rules.minLength(10), rules.maxLength(10)]),
+        gender: schema.enum(['MALE', 'FEMALE','OTHER']),
+        dob:schema.date({
+          format: 'dd-MM-yyyy'
+        })
+      })
+      const profileData = await request.validate({schema: newProfileSchema})
+      const userProfile = new Profile()
+      userProfile.userId = userId
+      userProfile.firstName = profileData.first_name
+      userProfile.lastName = profileData.last_name
+      userProfile.mobileNumber = profileData.mobile_number
+      userProfile.gender = profileData.gender
+      userProfile.dob = profileData.dob
+      await userProfile.save()
+      return userProfile
+    } catch(e) {
+      response.status(403)
+      return {
+        error: e
       }
     }
   }

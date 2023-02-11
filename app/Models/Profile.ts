@@ -4,6 +4,9 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+  
+  @column()
+  public userId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -24,7 +27,7 @@ export default class Profile extends BaseModel {
   public gender: string
 
   @column.date({
-    serialize: (value) => value.toFormat('DD-MM-YYYY'),
+    serialize: (value) => value.toFormat('dd-MM-yyyy'),
   })
   public dob: DateTime
 }
