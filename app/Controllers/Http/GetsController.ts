@@ -3,23 +3,17 @@ import User from 'App/Models/User'
 
 export default class PostsController {
   public async getAllUsers() {
-    const users = User.all()
-    return users
+    return User.all()
   }
 
   public async getUser({ auth }: HttpContextContract) {
-    try {
-      await auth.use('api').authenticate()
-      if(auth.use('api').isAuthenticated) {
-       return auth.use('api').user
-      } else {
-        return {error: 'You are not signed in'}
-      }
-    } catch(e) {
-      console.log(e)
-      return {
-        error: e
-      }
+    return auth.use('api').user
+  }
+
+  public async logout({ auth }: HttpContextContract) {
+    auth.use('api').logout()
+    return {
+      message: 'You have been logged out'
     }
   }
 }
