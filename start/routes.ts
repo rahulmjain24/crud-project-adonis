@@ -35,5 +35,17 @@ Route.group(() => {
 
 
 Route.get('/', async () => {
-  return { hello: 'world' }
+  return (
+    `
+    <p>
+      post /login -> AuthController
+      post /register -> AuthController
+      post /logout -> AuthController
+      get /user/profile -> ProfileController
+      post /user/profile -> ProfileController
+      put /user/profile -> ProfileController
+      delete /user/profile -> ProfileController
+    </p>
+    `
+  )
 })

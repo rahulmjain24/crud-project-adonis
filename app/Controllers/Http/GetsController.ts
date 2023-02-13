@@ -12,11 +12,11 @@ export default class PostsController {
       const user = auth.use('api').user!
       const profile = await Profile.findByOrFail('userId', user.id)
       return {
-        first_name: profile.firstName,
-        last_name: profile.lastName,
+        first_name: profile.firstName || "",
+        last_name: profile.lastName || "",
         email: user.email,
-        gender: profile.gender,
-        dob: profile.dob
+        gender: profile.gender || "",
+        dob: profile.dob || ""
       }
     } catch(e) {
       return e
