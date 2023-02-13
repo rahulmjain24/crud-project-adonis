@@ -13,7 +13,6 @@ export default class PostsController {
         password: schema.string({}, [rules.minLength(8), rules.maxLength(16)])
       })
       const newPostData = await request.validate({ schema: newUserSchema })
-      // console.log('newPostData',newPostData)
       const user = new User()
       user.email = newPostData.email
       user.password = newPostData.password
@@ -55,7 +54,7 @@ export default class PostsController {
         first_name: schema.string({}, [rules.minLength(3), rules.maxLength(30)]),
         last_name: schema.string({}, [rules.minLength(3), rules.maxLength(30)]),
         mobile_number: schema.string({}, [rules.mobile(), rules.minLength(10), rules.maxLength(10)]),
-        gender: schema.enum(['MALE', 'FEMALE','OTHER']),
+        gender: schema.enum(['MALE', 'FEMALE']),
         dob:schema.date({
           format: 'dd-MM-yyyy'
         })
