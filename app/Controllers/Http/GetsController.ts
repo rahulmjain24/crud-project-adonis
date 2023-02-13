@@ -7,25 +7,19 @@ export default class PostsController {
     return User.all()
   }
 
-  public async getUser({ auth }: HttpContextContract) {
-    return auth.use('api').user
-  }
-
   public async getUserProfile({ auth }: HttpContextContract) {
     try {
-      const profile = Profile.findByOrFail('userId', auth.use('api').user!.id)
-      return profile
-    } catch(e) {
+      const user = auth.use('api').user!
+      const profile = await Profile.findByOrFail('userId', user.id)
       return {
-        error: e
+        first_name: profile.firstName,
+        last_name: profile.lastName,
+        email: user.email,
+        gender: profile.gender,
+        dob: profile.dob
       }
-    }
-  }
-
-  public async logout({ auth }: HttpContextContract) {
-    auth.use('api').logout()
-    return {
-      message: 'You have been logged out'
+    } catch(e) {
+      return e
     }
   }
 }

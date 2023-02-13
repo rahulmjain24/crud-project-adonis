@@ -10,20 +10,19 @@ export default class PostsController {
     try {
       const newUserSchema = schema.create({
         email: schema.string({}, [rules.email()]),
-        password: schema.string({}, [rules.minLength(8), rules.maxLength(16)])
+        password: schema.string({}, [rules.minLength(8), rules.maxLength(16), rules.alphaNum()])
       })
       const newPostData = await request.validate({ schema: newUserSchema })
       const user = new User()
       user.email = newPostData.email
       user.password = newPostData.password
       await user.save()
-      return user
-    } catch (e) {
-      console.log(e)
-      response.status(403)
       return {
-        error: "Please Enter valid data"
+        message: 'The account has been created successfully!!'
       }
+    } catch (e) {
+      response.status(403)
+      return e.messages || e.detail && {error: 'This email already exists'}
     }
   }
 
@@ -42,7 +41,7 @@ export default class PostsController {
       console.log(e)
       response.status(403)
       return {
-        error: "Please Enter valid data"
+        error: "Please enter valid email and password!!"
       }
     }
   }
@@ -68,12 +67,19 @@ export default class PostsController {
       userProfile.gender = profileData.gender
       userProfile.dob = profileData.dob
       await userProfile.save()
-      return userProfile
+      return {
+        message: 'The profile has been created successfully'
+      }
     } catch(e) {
       response.status(403)
-      return {
-        error: e
-      }
+      return e.messages || {error: 'something went wrong'}
+    }
+  }
+  
+  public async logout({ auth }: HttpContextContract) {
+    auth.use('api').logout()
+    return {
+      message: 'You have been logged out'
     }
   }
  }

@@ -11,7 +11,7 @@ export default class DeletesController {
             if(profile.mobileNumber === number) {
                 user.delete()
                 return {
-                    message: 'Your profile has been '
+                    message: 'Your profile has been Deleted'
                 }
             } else {
                 response.status(403)
@@ -21,9 +21,7 @@ export default class DeletesController {
             }
         } catch(e) {
             console.log(e)
-            return {
-                error: e
-            }
+            return e
         }
     }
 }

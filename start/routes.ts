@@ -25,14 +25,10 @@ Route.post('/register', 'PostsController.createUser')
 Route.post('/login', 'PostsController.login')
 
 Route.group(() => {
-  Route.get('/user', 'GetsController.getUser')
-  Route.get('/logout', 'GetsController.logout')
-  Route.patch('/user', 'PatchesController.updateUser')
-
+  Route.post('/logout', 'PostsController.logout')
   Route.get('/user/profile', 'GetsController.getUserProfile')
   Route.post('/user/profile', 'PostsController.createProfile')
   Route.patch('/user/profile', 'PatchesController.updateProfile')
-
   Route.delete('/user/profile', 'DeletesController.deleteUser')
 })
 .middleware('auth')
