@@ -3,7 +3,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Profile from 'App/Models/Profile'
 
 
-export default class PatchesController {
+export default class PutsController {
     public async updateProfile({ auth, request, response }: HttpContextContract) {
         try {
             const newProfileSchema = schema.create({
