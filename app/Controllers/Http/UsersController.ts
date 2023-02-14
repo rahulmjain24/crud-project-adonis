@@ -15,21 +15,19 @@ export default class UsersController {
             const { mobile_number } = request.all();
             const user = auth.use('api').user!
 
-            const profile = await Profile.findByOrFail('user_id', user.id)
-            if (profile.mobileNumber === mobile_number) {
+            const profile = await Profile.query().where('user_id', user.id).where('mobile_number', mobile_number).firstOrFail()
+            if(profile) {
                 await user.delete()
                 return {
                     message: 'Your profile has been Deleted'
                 }
-            } else {
-                response.status(403)
-                return {
-                    error: 'Please enter valid number'
-                }
             }
         } catch (e) {
             console.log(e)
-            return e
+            response.status(403)
+            return {
+                error: 'Please enter valid number'
+            }
         }
     }
 
