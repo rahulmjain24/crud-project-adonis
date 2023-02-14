@@ -29,7 +29,7 @@ Route.group(() => {
   Route.get('/profile', 'ProfilesController.getUserProfile')
   Route.post('/profile', 'ProfilesController.createProfile')
   Route.put('/profile', 'ProfilesController.updateProfile')
-  Route.delete('/profile', 'UsersController.deleteUser')
+  Route.delete('/profile', 'ProfilesController.deleteProfile')
 })
 .prefix('/user')
 .middleware('auth')
@@ -38,15 +38,13 @@ Route.group(() => {
 Route.get('/', async () => {
   return (
     `
-    <p>
-      post /login -> AuthController
-      post /register -> AuthController
-      post /logout -> AuthController
-      get /user/profile -> ProfileController
-      post /user/profile -> ProfileController
-      put /user/profile -> ProfileController
-      delete /user/profile -> ProfileController
-    </p>
+    <p>post /login -> AuthController</p>
+    <p>post /register -> AuthController</p>
+    <p>post /logout -> AuthController</p>
+    <p>get /user/profile -> ProfileController</p>
+    <p>post /user/profile -> ProfileController</p>
+    <p>put /user/profile -> ProfileController</p>
+    <p> delete /user/profile -> ProfileController</p>
     `
   )
 })

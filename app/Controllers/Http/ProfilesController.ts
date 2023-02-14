@@ -77,4 +77,26 @@ export default class ProfilesController {
             return e
         }
     }
+
+    public async deleteProfile({ request, auth, response }: HttpContextContract) {
+        try {
+            const { mobile_number } = request.all();
+            const user = auth.use('api').user!
+
+            const profile = await Profile.query().where('user_id', user.id).where('mobile_number', mobile_number).firstOrFail()
+            if (profile) {
+                await user.delete()
+
+                return {
+                    message: 'Your profile has been Deleted'
+                }
+            }
+        } catch (e) {
+            console.log(e)
+            response.status(403)
+            return {
+                error: 'Please enter valid number'
+            }
+        }
+    }
 }

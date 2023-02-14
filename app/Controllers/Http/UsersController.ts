@@ -1,36 +1,13 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Profile from 'App/Models/Profile'
 import User from 'App/Models/User'
 import Hash from '@ioc:Adonis/Core/Hash'
 import CreateUser from 'App/Validators/CreateUserValidator'
 
 
 export default class UsersController {
-    public async deleteUser({ request, auth, response }: HttpContextContract) {
-        try {
-            const { mobile_number } = request.all();
-            const user = auth.use('api').user!
-
-            const profile = await Profile.query().where('user_id', user.id).where('mobile_number', mobile_number).firstOrFail()
-            if(profile) {
-                await user.delete()
-
-                return {
-                    message: 'Your profile has been Deleted'
-                }
-            }
-        } catch (e) {
-            console.log(e)
-            response.status(403)
-            return {
-                error: 'Please enter valid number'
-            }
-        }
-    }
-
     public async signUp({ request, response }: HttpContextContract) {
         try {
-            const {email, password} = await request.validate(CreateUser)
+            const { email, password } = await request.validate(CreateUser)
 
             await User.create({
                 email,
@@ -56,7 +33,7 @@ export default class UsersController {
             }
 
             const token = await auth.use('api').generate(user)
-            
+
             return token
         } catch (e) {
             console.log(e)
