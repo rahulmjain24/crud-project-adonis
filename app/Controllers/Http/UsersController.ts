@@ -6,10 +6,6 @@ import CreateUser from 'App/Validators/CreateUserValidator'
 
 
 export default class UsersController {
-    public async getAllUsers() {
-        return User.all()
-    }
-
     public async deleteUser({ request, auth, response }: HttpContextContract) {
         try {
             const { mobile_number } = request.all();
@@ -18,6 +14,7 @@ export default class UsersController {
             const profile = await Profile.query().where('user_id', user.id).where('mobile_number', mobile_number).firstOrFail()
             if(profile) {
                 await user.delete()
+
                 return {
                     message: 'Your profile has been Deleted'
                 }
@@ -31,13 +28,15 @@ export default class UsersController {
         }
     }
 
-    public async createUser({ request, response }: HttpContextContract) {
+    public async signUp({ request, response }: HttpContextContract) {
         try {
-            const newPostData = await request.validate(CreateUser)
-            const user = new User()
-            user.email = newPostData.email
-            user.password = newPostData.password
-            await user.save()
+            const {email, password} = await request.validate(CreateUser)
+
+            await User.create({
+                email,
+                password
+            })
+
             return {
                 message: 'The account has been created successfully!!'
             }
@@ -51,10 +50,13 @@ export default class UsersController {
         try {
             const { email, password } = request.all();
             const user = await User.query().where('email', email).firstOrFail()
+
             if (!(await Hash.verify(user.password, password))) {
                 return response.unauthorized('Invalid credentials')
             }
+
             const token = await auth.use('api').generate(user)
+            
             return token
         } catch (e) {
             console.log(e)
