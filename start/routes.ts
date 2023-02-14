@@ -20,17 +20,19 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/users', 'GetsController.getAllUsers')
-Route.post('/register', 'PostsController.createUser')
-Route.post('/login', 'PostsController.login')
+Route.get('/users', 'UsersController.getAllUsers')
+Route.post('/register', 'UsersController.createUser')
+Route.post('/login', 'UsersController.login')
+Route.post('/logout', 'UsersController.logout')
+.middleware('auth')
 
 Route.group(() => {
-  Route.post('/logout', 'PostsController.logout')
-  Route.get('/user/profile', 'GetsController.getUserProfile')
-  Route.post('/user/profile', 'PostsController.createProfile')
-  Route.put('/user/profile', 'PutsController.updateProfile')
-  Route.delete('/user/profile', 'DeletesController.deleteUser')
+  Route.get('/profile', 'ProfilesController.getUserProfile')
+  Route.post('/profile', 'ProfilesController.createProfile')
+  Route.put('/profile', 'ProfilesController.updateProfile')
+  Route.delete('/profile', 'UsersController.deleteUser')
 })
+.prefix('/user')
 .middleware('auth')
 
 
