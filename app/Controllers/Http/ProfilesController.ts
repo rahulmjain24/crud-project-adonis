@@ -1,3 +1,4 @@
+import { Exception } from '@adonisjs/core/build/standalone'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Profile from 'App/Models/Profile'
 import CreateProfile from 'App/Validators/CreateProfileValidator'
@@ -9,19 +10,18 @@ export default class ProfilesController {
             const user = auth.use('api').user!
             await user.load('profile')
 
-            if (user.profile) {
-                return {
-                    first_name: user.profile.firstName,
-                    last_name: user.profile.lastName,
-                    email: user.email,
-                    gender: user.profile.gender,
-                    dob: user.profile.dob
-                }
+            if (!user.profile) {
+                throw new Exception('Profile not found');
             }
 
             return {
-                error: 'Profile not found'
+                first_name: user.profile.firstName,
+                last_name: user.profile.lastName,
+                email: user.email,
+                gender: user.profile.gender,
+                dob: user.profile.dob
             }
+            
         } catch (e) {
             console.log(e)
             return {
